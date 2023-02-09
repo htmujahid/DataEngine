@@ -68,3 +68,30 @@ function createRandomProduct() {
 }
 exports.createRandomProduct = createRandomProduct;
 ```
+
+ProductMedia Schema
+
+```
+"use strict";
+exports.__esModule = true;
+exports.createRandomProductMedia = void 0;
+var { faker } = require("@faker-js/faker");
+var { ProductSingleton } = require("../Singletons/Product");
+var counter = 0
+function createRandomProductMedia() {
+    return {
+        _id: faker.datatype.uuid(),
+        productId: UserSingleton.getInstance().users[counter]._id,
+        mediaURL: faker.helpers.arrayElements([
+            faker.image.abstract(640, 480, true),
+            faker.image.abstract(640, 480, true),
+            faker.image.abstract(640, 480, true),
+            faker.image.abstract(640, 480, true),
+            faker.image.abstract(640, 480, true)
+        ]),
+        createdAt: faker.date.past(),
+        modifiedAt: faker.date.recent()
+    };
+}
+exports.createRandomProductMedia = createRandomProductMedia;
+```
