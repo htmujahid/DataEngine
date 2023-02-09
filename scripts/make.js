@@ -1,8 +1,8 @@
 var filename =
-    process.argv[2]?.charAt(0).toLowerCase() + process.argv[2]?.slice(1);
+	process.argv[2]?.charAt(0).toLowerCase() + process.argv[2]?.slice(1);
 
 if (!filename) {
-    throw Error("Schema filename is required");
+	throw Error("Schema filename is required");
 }
 
 var Filename = filename.charAt(0).toUpperCase() + filename.slice(1);
@@ -27,7 +27,7 @@ exports.__esModule = true;
 exports.${Filename}Singleton = void 0;
 var { createRandom${Filename} } = require("../Schemas/${Filename}");
 var { data_rows } = require("../config/data_rows");
-var ROWS = data_rows["${Filename}"];
+var ROWS = data_rows["${Filename}"] ?? 1;
 var ${filename}s = [];
 for (var i = 0; i < ROWS; i++) {
     ${filename}s.push(createRandom${Filename}());
@@ -47,36 +47,16 @@ var ${Filename}Singleton = /** @class */ (function () {
 exports.${Filename}Singleton = ${Filename}Singleton;`;
 
 if (!fs.existsSync("./src/config")) {
-    fs.mkdirSync("./src/config");
+	fs.mkdirSync("./src/config");
 }
 
 if (!fs.existsSync("./src/Schemas")) {
-    fs.mkdirSync("./src/Schemas");
+	fs.mkdirSync("./src/Schemas");
 }
 
 if (!fs.existsSync("./src/Singletons")) {
-    fs.mkdirSync("./src/Singletons");
+	fs.mkdirSync("./src/Singletons");
 }
-
-fs.readFile("./src/config/data_rows.js", (err, data) => {
-    var dataRows = {};
-    try {
-        var dataString = data?.toString();
-        var startIndex =
-            dataString?.indexOf("exports.data_rows = ") +
-            "exports.data_rows = ".length;
-        dataRows = JSON.parse(dataString?.substring(startIndex) ?? "{}");
-    } catch (e) {
-        dataRows = {};
-    }
-
-    dataRows[Filename] = 1;
-
-    fs.writeFileSync(
-        "./src/config/data_rows.js",
-        `exports.data_rows = ${JSON.stringify(dataRows, null, 4)}`
-    );
-});
 
 fs.writeFileSync(`./src/Schemas/${Filename}.js`, schemaPattern);
 fs.writeFileSync(`./src/Singletons/${Filename}.js`, singletonPattern);
