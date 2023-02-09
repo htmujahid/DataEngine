@@ -1,5 +1,4 @@
 var fs = require("fs");
-
 fs.readdirSync(__dirname + "/Singletons").forEach(file => {
 	var module = require(`./Singletons/${file}`);
 	try {
